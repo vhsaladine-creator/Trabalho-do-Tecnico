@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Ranking — SportZone V2{% endblock %}
+{% block content %}
+<div class="shell inner-page leaderboard-page">
+  <div class="page-title-row"><div><span class="eyebrow">COMUNIDADE</span><h1>Ranking geral</h1><p>Pontos de previsões e Arcade na mesma classificação.</p></div><div class="trophy">🏆</div></div>
+  <section class="podium">
+    {% for r in rows[:3] %}<article class="podium-card place-{{ loop.index }}"><span class="medal">{{ ['🥇','🥈','🥉'][loop.index0] }}</span><div class="rank-avatar-lg">{{ r['name'][0]|upper }}</div><h3>{{ r['name'] }}</h3><b>{{ r['score'] }} pts</b></article>{% endfor %}
+  </section>
+  <div class="card-surface ranking-list">
+    {% for r in rows %}<div class="rank-row"><span class="rank-num">#{{ loop.index }}</span><span class="rank-avatar">{{ r['name'][0]|upper }}</span><div><b>{{ r['name'] }}</b><small>Competidor SportZone</small></div><strong>{{ r['score'] }} pts</strong></div>{% endfor %}
+  </div>
+</div>
+{% endblock %}
