@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}Central esportiva — SportZone V2{% endblock %}
+{% block content %}
+<div class="shell sports-shell">
+  <section class="home-hero">
+    <div class="hero-copy">
+      <span class="hero-chip"><i></i> EXPERIÊNCIA V2</span>
+      <h1>Seu hub de <em>desafios esportivos</em> e pontuação.</h1>
+      <p>Acompanhe eventos, registre previsões sem custo e suba no ranking da comunidade.</p>
+      <div class="hero-actions">
+        <a class="primary-btn" href="#eventos">Ver eventos</a>
+        <a class="secondary-btn" href="{{ url_for('arcade') }}">Abrir Arcade <span>→</span></a>
+      </div>
+    </div>
+    <div class="hero-scoreboard">
+      <div class="scoreboard-top"><span><i class="pulse"></i> AO VIVO</span><small>Brasileirão</small></div>
+      <div class="featured-game">
+        <div class="featured-team"><div class="big-crest">PA</div><b>Palmeiras</b></div>
+        <div class="big-score"><strong>1</strong><span>:</span><strong>1</strong><small>2º TEMPO</small></div>
+        <div class="featured-team"><div class="big-crest alt">FL</div><b>Flamengo</b></div>
+      </div>
+      <div class="signal-line"><span></span></div>
+    </div>
+  </section>
+
+  <section class="stat-strip">
+    <div><span class="stat-icon">◫</span><p><b>{{ stats.events }}</b><small>eventos</small></p></div>
+    <div><span class="stat-icon live">●</span><p><b>{{ stats.live }}</b><small>ao vivo</small></p></div>
+    <div><span class="stat-icon">♟</span><p><b>{{ stats.players }}</b><small>jogadores</small></p></div>
+    <div><span class="stat-icon">★</span><p><b>+100</b><small>pts por acerto</small></p></div>
+  </section>
+
+  <div class="sports-layout" id="eventos">
+    <aside class="sport-nav card-surface">
+      <div class="surface-title"><span>ESPORTES</span><small>FILTRAR</small></div>
+      <a class="sport-item {{ 'active' if active_sport=='Todos' else '' }}" href="/?sport=Todos"><span class="sport-emoji">✦</span><b>Todos</b><small>9</small></a>
+      <a class="sport-item {{ 'active' if active_sport=='Futebol' else '' }}" href="/?sport=Futebol"><span class="sport-emoji">⚽</span><b>Futebol</b><small>5</small></a>
+      <a class="sport-item {{ 'active' if active_sport=='Basquete' else '' }}" href="/?sport=Basquete"><span class="sport-emoji">🏀</span><b>Basquete</b><small>2</small></a>
+      <a class="sport-item {{ 'active' if active_sport=='Tênis' else '' }}" href="/?sport=Tênis"><span class="sport-emoji">🎾</span><b>Tênis</b><small>2</small></a>
+      <div class="side-promo">
+        <span>ARCADE</span><b>6 minijogos disponíveis</b><p>Reflexo, memória e sequência.</p><a href="{{ url_for('arcade') }}">Jogar agora →</a>
+      </div>
+    </aside>
+
+    <main class="event-column">
+      <div class="section-heading">
+        <div><span class="eyebrow">CENTRAL DE EVENTOS</span><h2>{{ active_sport }}</h2></div>
+        <span class="section-note">Selecione quem você acha que vence</span>
+      </div>
+
+      <div class="event-list">
+        {% for m in matches %}
+        <article class="event-row">
+          <div class="event-meta">
+            <div><span class="league-dot"></span><b>{{ m['league'] }}</b><small>{{ m['sport'] }}</small></div>
+            {% if m['status']=='live' %}<span class="live-pill"><i></i> AO VIVO</span>{% else %}<time>{{ m['starts_at'][5:16].replace('T',' • ') }}</time>{% endif %}
+          </div>
+          <div class="event-main">
+            <div class="event-team"><span class="crest-sm">{{ m['home'][0:2].upper() }}</span><b>{{ m['home'] }}</b></div>
+            <div class="event-score">
+              {% if m['status']=='live' %}<strong>{{ m['score_home'] }} <span>—</span> {{ m['score_away'] }}</strong>{% else %}<strong>VS</strong>{% endif %}
+            </div>
+            <div class="event-team right"><b>{{ m['away'] }}</b><span class="crest-sm alt">{{ m['away'][0:2].upper() }}</span></div>
+          </div>
+          <div class="prediction-options {{ 'two' if m['sport']!='Futebol' else '' }}">
+            <button class="pick-btn" data-match="{{ m['id'] }}" data-pick="home" data-label="{{ m['home'] }}" data-matchlabel="{{ m['home'] }} x {{ m['away'] }}"><small>CASA</small><b>{{ m['home'] }}</b></button>
+            {% if m['sport']=='Futebol' %}<button class="pick-btn" data-match="{{ m['id'] }}" data-pick="draw" data-label="Empate" data-matchlabel="{{ m['home'] }} x {{ m['away'] }}"><small>EMPATE</small><b>X</b></button>{% endif %}
+            <button class="pick-btn" data-match="{{ m['id'] }}" data-pick="away" data-label="{{ m['away'] }}" data-matchlabel="{{ m['home'] }} x {{ m['away'] }}"><small>FORA</small><b>{{ m['away'] }}</b></button>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </main>
+
+    <aside class="prediction-dock card-surface">
+      <div class="dock-head"><div><span class="eyebrow">SEU DESAFIO</span><h3>Palpite atual</h3></div><button id="clearSlip" class="circle-btn">×</button></div>
+      <div id="emptySlip" class="dock-empty"><div>◎</div><b>Nenhuma seleção</b><p>Escolha um resultado em qualquer evento para montar seu palpite.</p></div>
+      <div id="slipContent" class="hidden">
+        <div class="selected-match"><small id="slipMatch"></small><strong id="slipPick"></strong><span>✓ não consome pontos</span></div>
+        <div class="reward-box"><span>RECOMPENSA POR ACERTO</span><b>+100 pts</b></div>
+        <button id="confirmPrediction" class="primary-btn full">Registrar palpite</button>
+        <p class="fineprint">Pontuação interna sem valor monetário.</p>
+      </div>
+    </aside>
+  </div>
+</div>
+{% endblock %}
