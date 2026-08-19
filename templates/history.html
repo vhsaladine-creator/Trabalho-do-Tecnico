@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Histórico — SportZone V2{% endblock %}
+{% block content %}
+<div class="shell inner-page">
+  <div class="page-title-row"><div><span class="eyebrow">SEU DESEMPENHO</span><h1>Histórico de palpites</h1><p>Veja suas escolhas e a pontuação conquistada.</p></div><button class="secondary-btn" id="settleDemo">Simular próximo resultado</button></div>
+  <div class="card-surface table-card">
+    {% if rows %}
+    <div class="table-wrap"><table><thead><tr><th>Evento</th><th>Palpite</th><th>Resultado</th><th>Pontos</th></tr></thead><tbody>
+      {% for r in rows %}<tr><td><div class="table-event"><b>{{ r['home'] }} x {{ r['away'] }}</b><small>{{ r['sport'] }} • {{ r['league'] }}</small></div></td><td>{{ {'home':r['home'],'draw':'Empate','away':r['away']}[r['pick']] }}</td><td><span class="status {{ r['status'] }}">{{ {'pending':'Pendente','won':'Acertou','lost':'Errou'}[r['status']] }}</span></td><td><b>+{{ r['points_awarded'] }}</b></td></tr>{% endfor %}
+    </tbody></table></div>
+    {% else %}<div class="empty-page"><span>◎</span><h3>Sem palpites ainda</h3><p>Escolha um evento na Central e registre sua primeira previsão.</p><a class="primary-btn" href="{{ url_for('home') }}">Ir para eventos</a></div>{% endif %}
+  </div>
+</div>
+{% endblock %}
