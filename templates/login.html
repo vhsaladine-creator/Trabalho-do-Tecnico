@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Entrar — SportZone V2{% endblock %}
+{% block content %}
+<div class="auth-shell">
+  <section class="auth-side"><span class="hero-chip"><i></i> SPORTZONE V2</span><h1>Volte para o <em>jogo.</em></h1><p>Seu histórico, recordes do Arcade e pontuação ficam ligados ao seu perfil.</p><div class="auth-feature"><span>⚡</span><div><b>Conta demo pronta</b><small>Teste todos os recursos sem configurar nada.</small></div></div></section>
+  <section class="auth-card card-surface">
+    <div class="auth-title"><span>ACESSO</span><h2>Entrar na conta</h2><p>Use seu e-mail e senha.</p></div>
+    <form method="post" class="auth-form">
+      <label>E-mail<input type="email" name="email" required placeholder="voce@email.com"></label>
+      <label>Senha<input type="password" name="password" required placeholder="••••••••"></label>
+      <button class="primary-btn full" type="submit">Entrar</button>
+    </form>
+    <div class="demo-box"><div><b>DEMO</b><span>demo@sportzone.local</span></div><code>demo123</code></div>
+    <p class="auth-footer">Não tem perfil? <a href="{{ url_for('register') }}">Criar conta</a></p>
+  </section>
+</div>
+{% endblock %}
