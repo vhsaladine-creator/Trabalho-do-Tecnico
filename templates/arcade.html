@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}Arcade — SportZone V2{% endblock %}
+{% block content %}
+<div class="shell arcade-page">
+  <section class="arcade-hero-v2">
+    <div>
+      <span class="hero-chip purple"><i></i> SPORTZONE ARCADE</span>
+      <h1>Seis desafios. <em>Uma pontuação.</em></h1>
+      <p>Jogos rápidos de reflexo, memória, ritmo e sequência. Sem roletas, apostas ou valores monetários.</p>
+    </div>
+    <div class="arcade-meter"><small>SEU SCORE</small><strong>{{ current_user['score'] if current_user else 0 }}</strong><span>pontos</span></div>
+  </section>
+
+  <section class="game-gallery">
+    {% for game in arcade_games %}
+    <article class="game-tile game-{{ game.slug }}" data-game-card="{{ game.slug }}">
+      <div class="tile-glow"></div>
+      <div class="tile-top"><span class="game-category">{{ game.tag }}</span><span class="best-score">RECORDE {{ best.get(game.key, 0) }}</span></div>
+      <div class="game-art">{{ game.icon }}</div>
+      <div class="tile-copy"><h2>{{ game.title }}</h2><p>{{ game.desc }}</p></div>
+      <button class="play-btn" data-open-game="{{ game.slug }}"><span>▶</span> JOGAR</button>
+    </article>
+    {% endfor %}
+  </section>
+
+  <section class="game-stage card-surface" id="gameStage">
+    <div class="stage-placeholder" id="stagePlaceholder"><span>🎮</span><h3>Escolha um minijogo</h3><p>Clique em JOGAR em um dos cards acima. O desafio será aberto aqui.</p></div>
+
+    <div class="stage-game hidden" id="stage-tiger">
+      <div class="stage-head"><div><span>🐯 REFLEXO</span><h2>Tiger Dash</h2></div><b id="tigerTimer">10s</b></div>
+      <p>Clique no tigre o máximo possível antes do tempo acabar.</p>
+      <div class="reaction-zone" id="tigerZone"><button class="target tiger-target" id="tigerTarget">🐯</button></div>
+      <div class="stage-actions"><span id="tigerHits">0 acertos</span><button class="primary-btn game-start" data-game="tiger">Começar rodada</button></div>
+    </div>
+
+    <div class="stage-game hidden" id="stage-snake">
+      <div class="stage-head"><div><span>🐍 MEMÓRIA</span><h2>Snake Trail</h2></div><b id="snakeLevel">Nível 0</b></div>
+      <p>Observe a sequência e repita tocando nos quatro blocos.</p>
+      <div class="sequence-board" id="snakeBoard"><button data-cell="0">1</button><button data-cell="1">2</button><button data-cell="2">3</button><button data-cell="3">4</button></div>
+      <div class="stage-actions"><span>Meta: nível 10</span><button class="primary-btn game-start" data-game="snake">Começar rodada</button></div>
+    </div>
+
+    <div class="stage-game hidden" id="stage-dragon">
+      <div class="stage-head"><div><span>🐉 PARES</span><h2>Dragon Match</h2></div><b id="dragonScore">0 pares</b></div>
+      <p>Abra duas cartas por vez e encontre todos os pares.</p>
+      <div class="memory-board" id="dragonBoard"></div>
+      <div class="stage-actions"><span>6 pares para concluir</span><button class="primary-btn game-start" data-game="dragon">Novo tabuleiro</button></div>
+    </div>
+
+    <div class="stage-game hidden" id="stage-lantern">
+      <div class="stage-head"><div><span>🏮 MEMÓRIA</span><h2>Lantern Memory</h2></div><b id="lanternScore">0/8</b></div>
+      <p>Memorize as oito lanternas antes que elas desapareçam.</p>
+      <div class="lantern-board" id="lanternBoard"></div>
+      <div class="stage-actions"><span>Um erro encerra a rodada</span><button class="primary-btn game-start" data-game="lantern">Começar rodada</button></div>
+    </div>
+
+    <div class="stage-game hidden" id="stage-panda">
+      <div class="stage-head"><div><span>🐼 RITMO</span><h2>Panda Tap</h2></div><b id="pandaScore">0 pts</b></div>
+      <p>Clique no botão somente quando aparecer um panda. Se aparecer bambu, espere.</p>
+      <div class="panda-zone"><button id="pandaSignal" class="panda-signal">?</button></div>
+      <div class="stage-actions"><span id="pandaTimer">15s</span><button class="primary-btn game-start" data-game="panda">Começar rodada</button></div>
+    </div>
+
+    <div class="stage-game hidden" id="stage-jade">
+      <div class="stage-head"><div><span>🀄 SEQUÊNCIA</span><h2>Jade Steps</h2></div><b id="jadeScore">0/20</b></div>
+      <p>Encontre os números de 1 a 20 na ordem correta.</p>
+      <div class="jade-board" id="jadeBoard"></div>
+      <div class="stage-actions"><span id="jadeTimer">20s</span><button class="primary-btn game-start" data-game="jade">Começar rodada</button></div>
+    </div>
+  </section>
+
+  <div class="safety-banner"><span>ⓘ</span><p><b>Modo entretenimento:</b> todos os resultados geram somente pontos internos de ranking. Não há saldo em R$, depósitos, saques, prêmio em dinheiro ou mecânica de cassino.</p></div>
+</div>
+{% endblock %}
