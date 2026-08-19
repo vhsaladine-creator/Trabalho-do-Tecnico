@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Criar conta — SportZone V2{% endblock %}
+{% block content %}
+<div class="auth-shell">
+  <section class="auth-side"><span class="hero-chip purple"><i></i> NOVO PERFIL</span><h1>Entre para o <em>ranking.</em></h1><p>Registre palpites esportivos e conquiste pontos nos minijogos do Arcade.</p><div class="auth-feature"><span>🏆</span><div><b>Pontuação única</b><small>Esportes e Arcade somam no mesmo ranking.</small></div></div></section>
+  <section class="auth-card card-surface">
+    <div class="auth-title"><span>CADASTRO</span><h2>Criar perfil</h2><p>Leva menos de um minuto.</p></div>
+    <form method="post" class="auth-form">
+      <label>Nome<input type="text" name="name" required placeholder="Seu nome"></label>
+      <label>E-mail<input type="email" name="email" required placeholder="voce@email.com"></label>
+      <label>Senha<input type="password" name="password" minlength="6" required placeholder="Mínimo 6 caracteres"></label>
+      <button class="primary-btn full" type="submit">Criar conta</button>
+    </form>
+    <p class="auth-footer">Já tem perfil? <a href="{{ url_for('login') }}">Entrar</a></p>
+  </section>
+</div>
+{% endblock %}
