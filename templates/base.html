@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0d17">
+  <title>{% block title %}SportZone V2{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="bg-orb orb-one"></div><div class="bg-orb orb-two"></div>
+  <header class="topbar">
+    <a href="{{ url_for('home') }}" class="brand">
+      <span class="brand-mark">SZ</span>
+      <span class="brand-copy"><b>SPORTZONE</b><small>PLAY • PREDICT • RANK</small></span>
+    </a>
+    <button class="mobile-menu" id="mobileMenu" aria-label="Abrir menu">☰</button>
+    <nav class="nav-links" id="navLinks">
+      <a class="{{ 'active' if request.endpoint=='home' else '' }}" href="{{ url_for('home') }}">Central</a>
+      <a class="{{ 'active' if request.endpoint=='arcade' else '' }}" href="{{ url_for('arcade') }}">Arcade</a>
+      <a class="{{ 'active' if request.endpoint=='leaderboard' else '' }}" href="{{ url_for('leaderboard') }}">Ranking</a>
+      {% if current_user %}<a class="{{ 'active' if request.endpoint=='history' else '' }}" href="{{ url_for('history') }}">Histórico</a>{% endif %}
+    </nav>
+    <div class="account-area">
+      {% if current_user %}
+        <div class="score-pill"><small>PONTOS</small><strong id="headerScore">{{ current_user['score'] }}</strong></div>
+        <div class="avatar">{{ current_user['name'][0]|upper }}</div>
+        <a class="text-btn" href="{{ url_for('logout') }}">Sair</a>
+      {% else %}
+        <a class="text-btn" href="{{ url_for('login') }}">Entrar</a>
+        <a class="primary-btn compact" href="{{ url_for('register') }}">Criar conta</a>
+      {% endif %}
+    </div>
+  </header>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-wrap">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+
+  <footer class="footer">
+    <span>SportZone V2</span>
+    <span>Simulação esportiva e minijogos por pontos • sem dinheiro, depósito ou saque.</span>
+  </footer>
+  <div class="toast" id="toast"></div>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
